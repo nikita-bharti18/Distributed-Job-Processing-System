@@ -1,10 +1,10 @@
-# 🚀 Distributed Job Processing System
+# 🚀 Scalable Distributed Job Processing Platform
 
 <p align="center">
 
 ![Java](https://img.shields.io/badge/Java-17-orange)
 ![Spring Boot](https://img.shields.io/badge/SpringBoot-Microservices-brightgreen)
-![Redis](https://img.shields.io/badge/Redis-Distributed%20Queue-red)
+![Redis](https://img.shields.io/badge/Redis-Queue-red)
 ![MongoDB](https://img.shields.io/badge/MongoDB-NoSQL-green)
 ![Docker](https://img.shields.io/badge/Docker-Container-blue)
 ![Kubernetes](https://img.shields.io/badge/Kubernetes-Orchestration-blueviolet)
@@ -12,181 +12,171 @@
 
 </p>
 
-
-
 ---
 
 <p align="center">
-<img src="https://media.giphy.com/media/xT0xeJpnrWC4XWblEk/giphy.gif" width="500">
+<img src="https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif" width="450">
 </p>
 
-A **cloud-native distributed backend system** designed to process **asynchronous background jobs at scale**.
+A **high-performance distributed backend system** built to handle **large-scale asynchronous job execution** efficiently.
 
-The system decouples **job submission from execution** using a **Redis-powered distributed queue**, enabling scalable and fault-tolerant job processing with horizontally scalable worker services.
+This system separates **request handling from background processing**, using a **Redis-based queue mechanism** and **scalable worker services** to ensure reliability, speed, and fault tolerance.
 
-Built using **Java, Spring Boot, Redis, MongoDB, Docker, and Kubernetes**, this project demonstrates production-level **distributed system design patterns** such as:
-
-- Asynchronous job processing  
-- Queue-based architecture  
-- Distributed workers  
-- Fault tolerance and retries  
-- Observability and monitoring  
-- Horizontal scalability  
+Designed with production-grade practices, it demonstrates core **distributed system principles** and **cloud-native architecture**.
 
 ---
 
-# 📌 Problem Statement
+# 📌 Why This System?
 
-Modern applications often need to process **long-running background tasks** such as:
+Applications often deal with operations that are **time-intensive**, such as:
 
-- Email notifications  
-- Report generation  
-- Image/video processing  
-- Data synchronization  
-- Payment reconciliation  
+* Sending bulk emails
+* Processing media files
+* Generating reports
+* Syncing large datasets
+* Handling financial transactions
 
-If these tasks are executed **synchronously**, they block user requests and degrade system performance.
+Executing these synchronously slows down the system and affects user experience.
 
-This project solves the problem by implementing **asynchronous distributed job execution using Redis queues and worker services**.
+👉 This platform solves that by introducing **asynchronous job execution using distributed workers and queues**.
 
 ---
 
-# 🏗 System Architecture
+# 🏗 Architecture Overview
 
 <p align="center">
-<img src="https://integration-developer.de/en/wp-content/uploads/2024/10/diagram-export-10-2-2024-2_10_18-PM.png" width="900"/>
+<img src="https://miro.medium.com/v2/resize:fit:1400/1*Yc7iHk3Gv8Q9Y8C9X4XG2A.png" width="850"/>
 </p>
 
-### High Level Flow
-Client Request
-↓
-API Service (Spring Boot)
-↓
-Redis Job Queue
-↓
-Worker Microservices
-↓
-MongoDB Job Storage
+### 🔄 System Flow
 
+```
+Client → API Service → Redis Queue → Worker Nodes → MongoDB
+```
 
+### ⚙️ Execution Steps
 
-### Processing Flow
-
-1. Client sends a job request to the API
-2. API service creates a job record
-3. Job is pushed to the **Redis Queue**
-4. Worker services continuously consume jobs
-5. Worker processes the task asynchronously
-6. Job results and status are stored in **MongoDB**
-7. Client can check job status using API
+1. Client submits a job via API
+2. API validates and stores job metadata
+3. Job is added to Redis queue
+4. Worker services fetch jobs continuously
+5. Tasks are processed asynchronously
+6. Results are stored in MongoDB
+7. Client retrieves job status via API
 
 ---
 
 # ⚙️ Tech Stack
 
-| Layer | Technology |
-|------|------------|
-Backend | Java, Spring Boot |
-Queue System | Redis |
-Database | MongoDB |
-Containerization | Docker |
-Orchestration | Kubernetes |
-Monitoring | Prometheus + Grafana |
-Logging | Structured Logs / ELK |
-API | RESTful APIs |
+| Layer         | Tools Used          |
+| ------------- | ------------------- |
+| Backend       | Java, Spring Boot   |
+| Queue         | Redis               |
+| Database      | MongoDB             |
+| Containers    | Docker              |
+| Orchestration | Kubernetes          |
+| Monitoring    | Prometheus, Grafana |
+| Logging       | ELK Stack           |
+| API           | REST                |
 
 ---
 
-# 🧠 Core Features
+# ✨ Key Capabilities
 
-### ⚡ Asynchronous Job Processing
-Jobs are executed asynchronously using a **Redis-backed queue system**.
+### ⚡ Async Job Execution
 
-### 📦 Distributed Workers
-Multiple worker services consume jobs concurrently to improve throughput.
+Background processing ensures fast API response times.
 
-### 🔁 Retry Mechanism
-Failed jobs automatically retry using configurable retry policies.
+### 🔄 Distributed Workers
 
-### 🧱 Fault Tolerance
-Worker failures do not cause job loss due to queue persistence.
+Multiple workers process jobs in parallel for higher throughput.
 
-### 📊 Observability
-System metrics and logs provide visibility into job processing.
+### 🔁 Retry Logic
 
-### 📈 Horizontal Scaling
-Worker services scale automatically using **Kubernetes autoscaling**.
+Automatic retries for failed jobs with configurable limits.
+
+### 🛡 Resilient Design
+
+No job loss due to queue persistence and fault isolation.
+
+### 📊 Monitoring & Logs
+
+Full visibility using metrics and structured logging.
+
+### 📈 Auto Scaling
+
+Workers scale dynamically with Kubernetes based on load.
 
 ---
 
-# 📂 Project Structure
-## 📁 Project Structure
+# 📂 Code Structure
 
 ```
-distributed-job-system
+distributed-job-platform
 │
 ├── api-service
-│   │
-│   ├── controller        # REST APIs to submit and manage jobs
-│   ├── service           # Business logic layer
-│   ├── repository        # Database interaction layer
-│   └── config            # Application configuration
+│   ├── controller
+│   ├── service
+│   ├── repository
+│   └── config
 │
 ├── worker-service
-│   │
-│   ├── job-consumer      # Consumes jobs from Redis queue
-│   ├── job-handlers      # Processes different types of jobs
-│   └── scheduler         # Handles scheduled/background tasks
+│   ├── consumer
+│   ├── handlers
+│   └── scheduler
 │
-├── common
-│   │
-│   ├── dto               # Data Transfer Objects
-│   ├── models            # Shared data models
-│   └── utils             # Utility/helper classes
+├── shared
+│   ├── dto
+│   ├── models
+│   └── utils
 │
-└── infrastructure
-    │
-    ├── docker            # Dockerfiles & container configs
-    └── kubernetes        # Kubernetes deployment manifests
+└── infra
+    ├── docker
+    └── kubernetes
 ```
 
 ---
 
-# 📡 API Endpoints
+# 📡 API Reference
 
-### Create Job
-POST /api/jobs
+### ➤ Create Job
 
-Example Request
+**POST** `/api/jobs`
 
 ```json
 {
   "type": "email",
   "payload": {
     "email": "user@example.com",
-    "message": "Welcome to our platform"
+    "message": "Welcome!"
   }
 }
-
 ```
-Get Job Status
 
-GET /api/jobs/{jobId}
+---
 
-Example Response
+### ➤ Get Job Status
+
+**GET** `/api/jobs/{jobId}`
+
+```json
 {
   "id": "123",
-  "type": "email",
   "status": "COMPLETED",
+  "type": "email",
   "createdAt": "timestamp"
 }
-
 ```
-🗃 Job Data Model
+
+---
+
+# 🧾 Job Model
+
+```json
 {
   "id": "jobId",
-  "type": "email",
   "status": "QUEUED",
+  "type": "task",
   "payload": {},
   "result": {},
   "retryCount": 0,
@@ -194,110 +184,72 @@ Example Response
   "completedAt": "timestamp"
 }
 ```
-Job Status Types
-QUEUED
-PROCESSING
-COMPLETED
-FAILED
-RETRYING
 
-## 🔁 Job Processing Flow
+### Status Types
+
+* QUEUED
+* PROCESSING
+* COMPLETED
+* FAILED
+* RETRYING
+
+---
+
+# 🔁 Processing Lifecycle
 
 <p align="center">
-  <img src="https://media.giphy.com/media/26BRuo6sLetdllPAQ/giphy.gif" width="450">
+<img src="https://media.giphy.com/media/3o7aD2saalBwwftBIY/giphy.gif" width="400">
 </p>
 
-### 📌 How the System Works
+### Step-by-Step Flow
 
-1️⃣ **Client sends job request**
-→ A user or application sends a job request to the **API Service** via REST endpoint.
-
-2️⃣ **API validates & creates job**
-→ The API validates input, generates a **Job ID**, and stores initial metadata.
-
-3️⃣ **Job pushed to Redis Queue**
-→ The job is published to the **Redis queue** for asynchronous processing.
-
-4️⃣ **Worker Service consumes job**
-→ Worker services continuously listen (poll/subscribe) to the Redis queue.
-
-5️⃣ **Job processed asynchronously**
-→ The worker executes the job using appropriate **job handlers**.
-
-6️⃣ **Result stored in MongoDB**
-→ Job results, status (`SUCCESS`, `FAILED`, `PROCESSING`) are stored in **MongoDB**.
-
-7️⃣ **Client checks job status**
-→ Clients query the API using the **Job ID** to retrieve the job result/status.
+1. Request received by API
+2. Job stored and queued
+3. Worker consumes job
+4. Task executed
+5. Result persisted
+6. Client fetches result
 
 ---
 
-### ⚡ Flow Summary
+# 🛡 Reliability Strategy
 
-```
-Client
-  │
-  ▼
-API Service
-  │
-  ▼
-Redis Queue
-  │
-  ▼
-Worker Service
-  │
-  ▼
-Job Handler
-  │
-  ▼
-MongoDB
-  │
-  ▼
-Client (Fetch Job Status)
-```
-## 🛡 Fault Tolerance Strategy
+### Retry Logic
 
-### 🔁 Retry Policy
-
-* If `retryCount < 3`
-  → The system retries the job automatically.
-
-* If retry attempts exceed the limit
-  → The job is moved to the **Dead Letter Queue (DLQ)** for further inspection or manual recovery.
+* Retry if attempts < 3
+* Move to Dead Letter Queue if limit exceeded
 
 ---
 
-## 📊 Observability
+# 📊 Observability
 
-Monitoring and logging are implemented using modern observability tools:
+### Tools Used
 
-* **Prometheus** → Collects system and application metrics
-* **Grafana** → Provides monitoring dashboards and visualization
-* **Structured Logging** → Enables easier debugging and log analysis
+* Prometheus (metrics)
+* Grafana (dashboards)
+* ELK (logging)
 
-### Example Metrics
+### Sample Metrics
 
 ```
 jobs_processed_total
 jobs_failed_total
-queue_length
-worker_active_count
+queue_size
+active_workers
 ```
 
 ---
 
-## 🐳 Docker Deployment
-
-Build and run all services using Docker Compose:
+# 🐳 Docker Setup
 
 ```bash
 docker-compose up --build
 ```
 
-### Services Started
+### Services
 
-* API Service
-* Worker Service
+* API
+* Worker
 * Redis
 * MongoDB
 * Prometheus
@@ -305,85 +257,62 @@ docker-compose up --build
 
 ---
 
-## ☸ Kubernetes Deployment
-
-Deploy all services to Kubernetes:
+# ☸ Kubernetes Deployment
 
 ```bash
 kubectl apply -f k8s/
 ```
 
-This deploys the system using Kubernetes manifests defined in the **k8s/** directory.
-
 ---
 
-## 📈 Scaling Strategy
+# 📈 Scaling Logic
 
 ```
-More Jobs → Queue Length Increases
-        ↓
-Kubernetes Auto-Scales Worker Pods
-        ↓
-More Workers Process Jobs Faster
+High Load → Queue Growth → Auto Scaling → Faster Processing
 ```
 
-This enables **horizontal scalability** and efficient job processing during high load.
+---
+
+# 🚀 Future Scope
+
+* Priority queues
+* Scheduled jobs
+* Rate limiting
+* Real-time updates (WebSockets)
+* Distributed tracing
+* Kafka integration
 
 ---
 
-## 🚀 Future Improvements
-
-* Priority-based job scheduling
-* Delayed job execution
-* Rate-limited job processing
-* WebSocket-based live job updates
-* Distributed tracing using **OpenTelemetry**
-* Event-driven architecture with **Kafka**
-
----
-
-## 🧪 Running Locally
-
-### 1️⃣ Clone Repository
+# 🧪 Local Setup
 
 ```bash
-git clone https://github.com/yourusername/distributed-job-system
-cd distributed-job-system
-```
+git clone https://github.com/yourusername/project
+cd project
 
-### 2️⃣ Start Infrastructure
-
-```bash
 docker-compose up
-```
-
-### 3️⃣ Run Services
-
-```bash
 mvn spring-boot:run
 ```
 
 ---
 
-## 📚 Key Distributed System Concepts Demonstrated
+# 📚 Concepts Covered
 
-* Queue-based system design
-* Asynchronous job processing
-* Horizontal scalability
-* Microservices architecture
-* Fault tolerance mechanisms
-* Observability and monitoring
-
----
-
-## 🤝 Contributing
-
-Pull requests are welcome.
-
-For major changes, please open an issue first to discuss what you would like to change.
+* Distributed systems
+* Queue-based architecture
+* Async processing
+* Microservices
+* Fault tolerance
+* Observability
 
 ---
 
-## ⭐ If You Like This Project
+# 🤝 Contributions
 
-Give it a **star ⭐ on GitHub** and help others discover it!
+Feel free to fork and contribute.
+
+---
+
+# ⭐ Support
+
+If this project helped you, consider giving it a **star ⭐** on GitHub!
